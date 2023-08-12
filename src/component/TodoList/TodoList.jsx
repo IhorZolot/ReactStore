@@ -1,3 +1,4 @@
+import { id } from "date-fns/locale";
 import { nanoid } from "nanoid";
 import React, { useEffect, useState } from "react";
 
@@ -8,7 +9,7 @@ const data = [
 ];
 
 export const TodoList = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(data);
   const [input, setInput] = useState("");
 
   const deleteTodo = (id) => {
@@ -35,13 +36,25 @@ export const TodoList = () => {
     if (todosFromLs) {
       const persetData = JSON.parse(todosFromLs);
       console.log(persetData);
-      setTodos(persetData);
+      if (persetData.length) setTodos(persetData);
     }
   }, []);
 
   useEffect(() => {
     localStorage.setItem("todo", JSON.stringify(todos));
   }, [todos]);
+
+  const deleteAll = () => {
+    setTodos([]);
+  };
+  const changeCheckbox = (id) => {
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+
   return (
     <div>
       <button onClick={addTodo}>AddTodo</button>
@@ -49,10 +62,16 @@ export const TodoList = () => {
       <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() => changeCheckbox(todo.id)}
+            ></input>
             <h2>{todo.title}</h2>
             <button onClick={() => deleteTodo(todo.id)}>Delete</button>
           </li>
         ))}
+        <button onClick={deleteAll}>DelAll</button>
       </ul>
     </div>
   );
