@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const data = [
   { title: "Buy milk", id: 1, completed: false },
@@ -8,7 +8,7 @@ const data = [
 ];
 
 export const TodoList = () => {
-  const [todos, setTodos] = useState(data);
+  const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
 
   const deleteTodo = (id) => {
@@ -30,6 +30,18 @@ export const TodoList = () => {
     setInput(e.target.value);
   };
 
+  useEffect(() => {
+    const todosFromLs = localStorage.getItem("todo");
+    if (todosFromLs) {
+      const persetData = JSON.parse(todosFromLs);
+      console.log(persetData);
+      setTodos(persetData);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("todo", JSON.stringify(todos));
+  }, [todos]);
   return (
     <div>
       <button onClick={addTodo}>AddTodo</button>
