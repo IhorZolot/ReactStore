@@ -18,6 +18,12 @@ export const Counter = () => {
     console.log("step in change");
   };
 
+  const resetCounter = () => {
+    setCounter(0);
+    setStep(1);
+    setInput(1);
+  };
+
   return (
     <div>
       <h2>{counter}</h2>
@@ -30,6 +36,7 @@ export const Counter = () => {
         Button +
       </button>
       <button onClick={() => plusFive("hello")}>Button +5</button>
+      <button onClick={resetCounter}>Reset</button>
     </div>
   );
 };
